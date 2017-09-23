@@ -13,12 +13,12 @@ def fetch_created_device_ids():
         cur = con.cursor()
         cur.execute("SELECT device_id from device where device_state='INIT'")
         #ver = cur.fetchall()
-        print cur
+        print (cur)
         for record in cur:
             dev_ids.append(record[0])
-            print record[0]
-    except psycopg2.DatabaseError, e:
-        print 'Error %s' % e
+            print (record[0])
+    except psycopg2.DatabaseError as e :
+        print ('Error %s' % e)
 
     return  dev_ids
 
@@ -29,7 +29,7 @@ def create_update_req():
         #1. Connect to db, find rows with STATE=CREATE
         dev_ids = fetch_created_device_ids()
         for dev in dev_ids:
-            print "Found device init"
+            print ("Found device init")
             #2. Generate short/long transaction Ids
             ltrid = random.randint(1, 1000000000)
             strid = random.randint(1, 1000000000)
@@ -57,16 +57,16 @@ def create_update_req():
 
             try:
                 response = requests.post(url, data=data, headers={"content-type":"application/json"})
-                print response
+                print (response)
             except requests.exceptions.ConnectionError:
-                print 'Error, Connection Error'
+                print ('Error, Connection Error')
 
 
             #4.
-            print "Sleeping while new device entries are created....."
+            print ("Sleeping while new device entries are created.....")
             time.sleep(10)
 
 
 #if __name__ =="main":
-print "Running"
+print ("Running")
 create_update_req()
